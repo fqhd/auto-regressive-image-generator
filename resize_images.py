@@ -1,10 +1,14 @@
 from PIL import Image
 import os
+from tqdm import tqdm
 
-images = os.listdir('Arcane4K')
+image_folder = input('Image Folder:')
+images = os.listdir(image_folder)
+target_size = int(input('Target Size:'))
+os.mkdir('resized')
 
-for path in images:
-    with Image.open('Arcane4K/' + path) as img:
+for path in tqdm(images):
+    with Image.open(os.path.join(image_folder, path)) as img:
         w, h = img.size
         if w > h:
             left = (w - h) / 2
@@ -18,5 +22,5 @@ for path in images:
             bottom = (h + w) / 2
 
         img = img.crop((left, top, right, bottom))
-        img = img.resize((32, 32))
-        img.save('arcane/' + path)
+        img = img.resize((target_size, target_size))
+        img.save('resized/' + path)
